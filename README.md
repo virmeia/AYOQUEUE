@@ -29,3 +29,4 @@ streamlit run app.py
 cd backend
 python export.py
 ```
+ty
