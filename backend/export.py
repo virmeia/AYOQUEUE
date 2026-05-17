@@ -11,10 +11,10 @@ if __name__ == '__main__':
     
     print(f"Running simulation with {num_windows} window(s)...")
     
-    df, utilization = run_parallel_mm1_sim(
-        arrival_avg=avg_arrival, 
-        service_avg=avg_service, 
-        num_students=num_students, 
+    df, utilization, steady_state = run_parallel_mm1_sim(
+        arrival_avg=avg_arrival,
+        service_avg=avg_service,
+        num_students=num_students,
         num_windows=num_windows
     )
     

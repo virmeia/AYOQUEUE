@@ -123,35 +123,40 @@ if 'results' not in st.session_state:
 
 # Run Simulation
 if run_btn:
-    with st.spinner('Running simulation...'):
-        df, utilization = run_parallel_mm1_sim(
+    with st.spinner('Running 1,000 simulation runs...'):
+        df, utilization, steady_state = run_parallel_mm1_sim(
             avg_arrival, avg_service, num_students, num_windows
         )
-    st.session_state.results = (df, utilization)
+    st.session_state.results = (df, utilization, steady_state)
 
 # Display Results
 if st.session_state.results:
-    df, utilization = st.session_state.results
+    df, utilization, steady_state = st.session_state.results
     color, label = risk_label(utilization)
-
-    # Risk banner
     st.markdown(f'<div class="risk-box risk-{color}">{label}</div>', unsafe_allow_html=True)
 
     if df is None:
         st.stop()
 
-    st.subheader('System Performance Metrics')
-    
-    # Metrics row
     avg_wait = df['Wait Time (Mins)'].mean()
     max_wait = df['Wait Time (Mins)'].max()
     pct_over_10 = (df['Wait Time (Mins)'] > 10).mean() * 100
 
+    st.subheader('System Performance Metrics')
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric('Server Utilization', f"{utilization * 100:.1f}%")
+    col1.metric('Server Utilization (ρ)', f"{utilization * 100:.1f}%")
     col2.metric('Avg. Wait Time', f"{avg_wait:.2f} mins")
     col3.metric('Max Wait Time', f"{max_wait:.2f} mins")
     col4.metric('Students Waiting >10 mins', f"{pct_over_10:.1f}%")
+
+    # Steady-state metrics row
+    if steady_state:
+        st.subheader('Steady-State Analytical Metrics')
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric('Avg. Students in Queue (Lq)', f"{steady_state['Lq']:.4f}")
+        c2.metric('Avg. Students in System (L)', f"{steady_state['L']:.4f}")
+        c3.metric('Avg. Wait in Queue (Wq)', f"{steady_state['Wq']:.4f} mins")
+        c4.metric('Avg. Time in System (W)', f"{steady_state['W']:.4f} mins")
 
     st.divider()
 
