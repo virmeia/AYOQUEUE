@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AyoQueue — Registrar Decision Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --red:       #c51e3a;
+      --red-light: #df9ea9;
+      --red-muted: #f8d7da;
+      --ink:       #1a1118;
+      --ink-2:     #3d3242;
+      --smoke:     #f4f1f0;
+      --white:     #fffcfb;
+      --border:    #e8e2e0;
+      --yellow:    #ffc107;
+      --yellow-bg: #fff3cd;
+      --green:     #28a745;
+      --green-bg:  #d4edda;
+      --blue:      #4361ee;
+      --blue-bg:   #f0f4ff;
+      --sidebar-w: 320px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--smoke);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── TOP NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      border-bottom: 3px solid var(--red);
+    }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem; font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.03em;
+    }
+    .nav-logo span { color: var(--red); }
+    .nav-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: #aaa;
+      background: #2d2635;
+      padding: 3px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.05em;
+    }
+    .nav-user {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-user-info {
+      text-align: right;
+    }
+    .nav-user-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      color: #e8a44a;
+    }
+    .nav-user-sub {
+      font-size: 0.65rem; color: #aaa;
+    }
+    .nav-logout {
+      background: transparent; border: 1px solid #c47a2a;
+      color: #c47a2a; font-size: 0.7rem; font-weight: 600;
+      padding: 4px 10px; border-radius: 5px; cursor: pointer;
+      transition: all 0.2s; font-family: 'Syne', sans-serif;
+    }
+    .nav-logout:hover { background: #c47a2a; color: #1a0e08; }
+    .nav-home {
+      background: transparent; border: 1px solid #555;
+      color: #aaa; font-size: 0.7rem;
+      padding: 4px 10px; border-radius: 5px; cursor: pointer;
+      transition: all 0.2s; font-family: 'Syne', sans-serif;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .nav-home:hover { border-color: #c47a2a; color: #e8a44a; }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      flex: 1;
+      min-height: calc(100vh - 56px);
+    }
+
+    /* ── SIDEBAR ── */
+    aside {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      overflow-y: auto;
+    }
+    .sidebar-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.25rem;
+    }
+    .sidebar-caption {
+      font-size: 0.8rem;
+      color: var(--ink-2);
+      line-height: 1.5;
+    }
+    .divider { border: none; border-top: 1px solid var(--border); }
+
+    /* Form Controls */
+    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .field label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--ink-2);
+    }
+    .field .hint {
+      font-size: 0.72rem;
+      color: #999;
+      line-height: 1.4;
+      margin-top: -0.2rem;
+    }
+    .field input[type="number"] {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--ink);
+      background: var(--smoke);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field input[type="number"]:focus { border-color: var(--red); }
+
+    /* Slider */
+    .slider-row { display: flex; align-items: center; gap: 0.75rem; }
+    .slider-row input[type="range"] {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      outline: none;
+      cursor: pointer;
+    }
+    .slider-row input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--red);
+      border: 3px solid var(--white);
+      box-shadow: 0 0 0 1.5px var(--red);
+      cursor: pointer;
+    }
+    .slider-val {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
+      min-width: 1.8rem;
+      text-align: center;
+      color: var(--ink);
+    }
+
+    /* Run Button */
+    .run-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    .run-btn:hover { background: #a8172f; }
+    .run-btn:active { transform: scale(0.98); }
+    .run-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* ── MAIN ── */
+    main {
+      flex: 1;
+      padding: 2rem 2.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    /* Page header */
+    .page-header { }
+    .page-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+    .page-header h1 span { color: var(--red); }
+    .page-header p {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--ink-2);
+      max-width: 640px;
+      line-height: 1.6;
+    }
+
+    /* Risk Banner */
+    .risk-banner {
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-left: 5px solid;
+      display: flex; align-items: center; gap: 0.6rem;
+      animation: fadeSlide 0.4s ease;
+    }
+    .risk-green  { background: var(--green-bg);  color: #155724; border-color: var(--green); }
+    .risk-yellow { background: var(--yellow-bg); color: #856404; border-color: var(--yellow); }
+    .risk-red    { background: var(--red-muted); color: #721c24; border-color: var(--red); }
+
+    /* Metric Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+    .metric-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      animation: fadeSlide 0.4s ease;
+    }
+    .metric-card .label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 0.4rem;
+    }
+    .metric-card .value {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+    }
+    .metric-card .value.red { color: var(--red); }
+    .metric-card .value.green { color: var(--green); }
+    .metric-card .value.yellow { color: #c89a00; }
+
+    /* Chart Container */
+    .chart-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      animation: fadeSlide 0.5s ease;
+    }
+    .chart-card h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--red);
+      margin-bottom: 1rem;
+    }
+    .chart-wrap { position: relative; height: 300px; }
+
+    /* Summary Box */
+    .summary-box {
+      background: var(--blue-bg);
+      border-left: 5px solid var(--blue);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: 0.88rem;
+      color: #1a1a2e;
+      line-height: 1.7;
+      animation: fadeSlide 0.5s ease;
+    }
+    .summary-box strong { font-weight: 600; }
+
+    /* Empty State */
+    .empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: #bbb;
+      text-align: center;
+      padding: 4rem;
+    }
+    .empty-state .big-icon {
+      font-size: 4rem;
+      opacity: 0.3;
+    }
+    .empty-state p {
+      font-size: 0.9rem;
+      max-width: 300px;
+      line-height: 1.6;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: inline-block;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+
+    /* Table */
+    .table-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      animation: fadeSlide 0.6s ease;
+    }
+    .table-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .table-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--ink);
+    }
+    .table-header .badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      background: var(--smoke);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 100px;
+      color: var(--ink-2);
+    }
+    .table-wrap { overflow-x: auto; max-height: 280px; overflow-y: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #999;
+      background: var(--smoke);
+      padding: 0.6rem 1rem;
+      text-align: right;
+      position: sticky; top: 0;
+    }
+    thead th:first-child { text-align: left; }
+    tbody td {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--ink-2);
+      padding: 0.5rem 1rem;
+      text-align: right;
+      border-top: 1px solid var(--border);
+    }
+    tbody td:first-child { text-align: left; font-weight: 500; color: var(--ink); }
+    tbody tr:hover td { background: var(--smoke); }
+    tbody tr.highlight td { background: #fff0f2; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 820px) {
+      aside { width: 260px; }
+      main { padding: 1.5rem; }
+    }
+    @media (max-width: 640px) {
+      .layout { flex-direction: column; }
+      aside { width: 100%; border-right: none; border-bottom: 1px solid var(--border); }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Ayo<span>Queue</span></div>
+  <div class="nav-user">
+    <a href="homepage.html" class="nav-home">← Home</a>
+    <div class="nav-user-info">
+      <div class="nav-user-name" id="navUserName">Student</div>
+      <div class="nav-user-sub" id="navUserSub">Loading…</div>
+    </div>
+    <button class="nav-logout" onclick="doLogout()">Log Out</button>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div>
+      <div class="sidebar-title">Simulation Parameters</div>
+      <div class="sidebar-caption">Configure the queuing model inputs below:</div>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="field">
+      <label>Avg. Inter-Arrival Time (mins)</label>
+      <div class="hint">Average time between student arrivals at Window 1</div>
+      <input type="number" id="avg-arrival" value="2.45" step="0.01" min="0.1" />
+    </div>
+
+    <div class="field">
+      <label>Avg. Service Time (mins)</label>
+      <div class="hint">Average time staff takes to process one transaction</div>
+      <input type="number" id="avg-service" value="3.18" step="0.01" min="0.1" />
+    </div>
+
+    <hr class="divider" />
+
+    <div class="sidebar-title" style="margin-bottom:0">Scenario Settings</div>
+
+    <div class="field">
+      <label>Active Windows (Staff)</label>
+      <div class="hint">Number of parallel staff serving students</div>
+      <div class="slider-row">
+        <input type="range" id="num-windows" min="1" max="5" value="1" />
+        <div class="slider-val" id="windows-val">1</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Students to Simulate</label>
+      <div class="hint">Total number of students to run through the model</div>
+      <input type="number" id="num-students" value="100" step="10" min="10" />
+    </div>
+
+    <button class="run-btn" id="run-btn" onclick="runSimulation()">
+      <span id="btn-text">▶ Run Simulation</span>
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main-content">
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>University Registrar<br/><span>Queue Simulation</span></h1>
+      <p>This tool models the registrar as a queuing system using M/M/1 mathematics. Configure parameters on the left, then run the simulation to visualize wait times, utilization, and bottleneck risks.</p>
+    </div>
+
+    <!-- Empty State (shown before first run) -->
+    <div class="empty-state" id="empty-state">
+      <div class="big-icon">⏳</div>
+      <p>Configure your simulation parameters on the left and hit <strong>Run Simulation</strong> to begin.</p>
+    </div>
+
+    <!-- Results (hidden until simulation runs) -->
+    <div id="results" style="display:none; display:flex; flex-direction:column; gap:1.75rem;">
+
+      <!-- Risk Banner -->
+      <div id="risk-banner" class="risk-banner risk-green">
+        🟢 Ready — run the simulation to see results.
+      </div>
+
+      <!-- Metrics -->
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="label">Server Utilization</div>
+          <div class="value" id="m-util">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Avg. Wait Time</div>
+          <div class="value" id="m-avg">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Max Wait Time</div>
+          <div class="value red" id="m-max">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Waiting &gt;10 mins</div>
+          <div class="value" id="m-pct">—</div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-card">
+        <h2>Queue Simulation: Student Wait Times</h2>
+        <div class="chart-wrap">
+          <canvas id="waitChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="summary-box" id="summary-box">
+        💡 <strong>Summary:</strong> <span id="summary-text"></span>
+      </div>
+
+      <!-- Data Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <h2>Simulation Data</h2>
+          <span class="badge" id="table-badge">0 students</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Arrival (min)</th>
+                <th>Inter-Arrival</th>
+                <th>Service Time</th>
+                <th>Start Time</th>
+                <th>Wait Time</th>
+                <th>Finish Time</th>
+              </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<script>
+  // ── Auth guard ──
+  const API = 'http://localhost:5000/api';
+  let currentUser = null;
+
+  async function initAuth() {
+    // Try sessionStorage first (works offline / without backend)
+    const stored = sessionStorage.getItem('aq_user');
+    if (stored) {
+      currentUser = JSON.parse(stored);
+      updateNavUser(currentUser);
+      return;
+    }
+    // Try live backend session
+    try {
+      const res  = await fetch(`${API}/me`, { credentials: 'include' });
+      if (res.ok) {
+        currentUser = await res.json();
+        sessionStorage.setItem('aq_user', JSON.stringify(currentUser));
+        updateNavUser(currentUser);
+        return;
+      }
+    } catch(e) { /* backend offline */ }
+    // Not logged in → redirect
+    window.location.href = 'login.html';
+  }
+
+  function updateNavUser(u) {
+    document.getElementById('navUserName').textContent = u.name || u.id;
+    document.getElementById('navUserSub').textContent  =
+      u.course && u.course !== 'Staff'
+        ? `${u.course} · Year ${u.year}`
+        : u.course || 'TUP Manila';
+  }
+
+  async function doLogout() {
+    sessionStorage.removeItem('aq_user');
+    try { await fetch(`${API}/logout`, { method:'POST', credentials:'include' }); } catch(e) {}
+    window.location.href = 'login.html';
+  }
+
+  initAuth();
+
+  // ── Slider sync ──
+  const slider = document.getElementById('num-windows');
+  const sliderVal = document.getElementById('windows-val');
+  slider.addEventListener('input', () => sliderVal.textContent = slider.value);
+
+  // ── Chart instance ──
+  let chartInstance = null;
+
+  // ── Simulation Logic (JS port of Python simulation.py) ──
+  function expRandom(mean) {
+    return -mean * Math.log(1 - Math.random());
+  }
+
+  function runParallelMM1(arrivalAvg, serviceAvg, numStudents, numWindows) {
+    const totalArrivalRate = 1.0 / arrivalAvg;
+    const windowArrivalRate = totalArrivalRate / numWindows;
+    const serviceRate = 1.0 / serviceAvg;
+    const utilization = windowArrivalRate / serviceRate;
+
+    if (utilization >= 1.0) return { data: null, utilization };
+
+    const windowArrivalAvg = 1.0 / windowArrivalRate;
+    const interArrivals = Array.from({ length: numStudents }, () => expRandom(windowArrivalAvg));
+    const serviceTimes  = Array.from({ length: numStudents }, () => expRandom(serviceAvg));
+
+    const arrivalTimes = interArrivals.reduce((acc, t, i) => {
+      acc.push((acc[i - 1] ?? 0) + t); return acc;
+    }, []);
+
+    const startTimes  = new Array(numStudents).fill(0);
+    const waitTimes   = new Array(numStudents).fill(0);
+    const finishTimes = new Array(numStudents).fill(0);
+
+    for (let i = 0; i < numStudents; i++) {
+      startTimes[i]  = i === 0 ? arrivalTimes[i] : Math.max(arrivalTimes[i], finishTimes[i - 1]);
+      waitTimes[i]   = startTimes[i] - arrivalTimes[i];
+      finishTimes[i] = startTimes[i] + serviceTimes[i];
+    }
+
+    const data = arrivalTimes.map((_, i) => ({
+      student: i + 1,
+      interArrival: interArrivals[i],
+      arrival: arrivalTimes[i],
+      service: serviceTimes[i],
+      start: startTimes[i],
+      wait: waitTimes[i],
+      finish: finishTimes[i],
+    }));
+
+    return { data, utilization };
+  }
+
+  // ── Rolling average ──
+  function rollingAvg(arr, w) {
+    return arr.map((_, i) => {
+      const slice = arr.slice(Math.max(0, i - w + 1), i + 1);
+      return slice.reduce((a, b) => a + b, 0) / slice.length;
+    });
+  }
+
+  // ── Risk label ──
+  function riskLabel(rho) {
+    const pct = (rho * 100).toFixed(1);
+    if (rho >= 1) return ['red', '🔴 UNSTABLE — Queue will grow infinitely at this rate.'];
+    if (rho >= 0.9) return ['red', `🔴 CRITICAL RISK (${pct}%) — Severe delays are almost certain.`];
+    if (rho >= 0.7) return ['yellow', `🟡 MODERATE RISK (${pct}%) — System is under stress. Consider adding staff during peak hours.`];
+    return ['green', `🟢 STABLE (${pct}%) — Current staffing can handle the load comfortably.`];
+  }
+
+  // ── Summary text ──
+  function plainSummary(rho, avgWait, numWindows, numStudents) {
+    const sw = numWindows === 1 ? 'window' : 'windows';
+    if (rho >= 1) {
+      return `With <strong>${numWindows} ${sw}</strong> and the current arrival and service rates, the queue is mathematically unstable — it will grow without bound. At minimum, add one more staff member during peak hours.`;
+    }
+    const stability = rho < 0.7
+      ? 'This setup has a healthy buffer before delays become severe.'
+      : 'The system is close to its limit — a sudden surge could cause significant delays.';
+    return `With <strong>${numWindows} active ${sw}</strong>, the registrar can handle the observed student load at <strong>${(rho * 100).toFixed(1)}% capacity</strong>. Across ${numStudents} simulated students, the average wait time is <strong>${avgWait.toFixed(2)} minutes</strong>. ${stability}`;
+  }
+
+  // ── Main run ──
+  async function runSimulation() {
+    const arrivalAvg  = parseFloat(document.getElementById('avg-arrival').value);
+    const serviceAvg  = parseFloat(document.getElementById('avg-service').value);
+    const numWindows  = parseInt(document.getElementById('num-windows').value);
+    const numStudents = parseInt(document.getElementById('num-students').value);
+
+    if (isNaN(arrivalAvg) || isNaN(serviceAvg) || arrivalAvg <= 0 || serviceAvg <= 0) return;
+
+    const btn = document.getElementById('run-btn');
+    btn.disabled = true;
+    document.getElementById('btn-text').innerHTML = '<span class="spinner"></span> Simulating…';
+
+    // Try backend API first, fall back to JS engine
+    let result = null;
+    try {
+      const res = await fetch(`${API}/simulate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          arrival_avg: arrivalAvg, service_avg: serviceAvg,
+          num_students: numStudents, num_windows: numWindows
+        }),
+      });
+      if (res.ok) result = await res.json();
+    } catch(e) { /* backend offline, use JS fallback */ }
+
+    // JS fallback
+    if (!result) {
+      const js = runParallelMM1(arrivalAvg, serviceAvg, numStudents, numWindows);
+      if (js.data === null) {
+        result = { stable: false, utilization: js.utilization };
+      } else {
+        const waits = js.data.map(d => d.wait);
+        result = {
+          stable: true,
+          utilization: js.utilization,
+          avg_wait: waits.reduce((a,b)=>a+b,0)/waits.length,
+          max_wait: Math.max(...waits),
+          pct_over_10: waits.filter(w=>w>10).length/waits.length*100,
+          data: js.data,
+        };
+      }
+    }
+
+    // Normalise data field names (API uses snake_case, JS fallback uses camelCase)
+    if (result.data) {
+      result.data = result.data.map(r => ({
+        student: r.student,
+        arrival: r.arrival ?? r.arrival,
+        interArrival: r.interArrival ?? r.inter_arrival ?? r.interArrival,
+        service: r.service,
+        start: r.start,
+        wait: r.wait,
+        finish: r.finish,
+      }));
+    }
+
+    const { data, utilization } = { data: result.data || null, utilization: result.utilization };
+    (function() {
+
+      // Show results panel
+      document.getElementById('empty-state').style.display = 'none';
+      document.getElementById('results').style.display = 'flex';
+
+      // Risk banner
+      const banner = document.getElementById('risk-banner');
+      const [color, label] = riskLabel(utilization);
+      banner.className = `risk-banner risk-${color}`;
+      banner.textContent = label;
+
+      if (!data) {
+        // Unstable — hide charts
+        document.getElementById('m-util').textContent = '∞';
+        document.getElementById('m-avg').textContent  = '—';
+        document.getElementById('m-max').textContent  = '—';
+        document.getElementById('m-pct').textContent  = '—';
+        document.getElementById('summary-text').innerHTML = plainSummary(utilization, 0, numWindows, numStudents);
+        btn.disabled = false;
+        document.getElementById('btn-text').textContent = '▶ Run Simulation';
+        return;
+      }
+
+      // Metrics
+      const waits    = data.map(d => d.wait);
+      const avgWait  = waits.reduce((a, b) => a + b, 0) / waits.length;
+      const maxWait  = Math.max(...waits);
+      const pctOver  = (waits.filter(w => w > 10).length / waits.length) * 100;
+
+      const utilEl = document.getElementById('m-util');
+      utilEl.textContent = `${(utilization * 100).toFixed(1)}%`;
+      utilEl.className = `value ${utilization >= 0.9 ? 'red' : utilization >= 0.7 ? 'yellow' : 'green'}`;
+
+      document.getElementById('m-avg').textContent = `${avgWait.toFixed(2)} min`;
+      document.getElementById('m-max').textContent = `${maxWait.toFixed(2)} min`;
+      const pctEl = document.getElementById('m-pct');
+      pctEl.textContent = `${pctOver.toFixed(1)}%`;
+      pctEl.className = `value ${pctOver > 30 ? 'red' : pctOver > 10 ? 'yellow' : 'green'}`;
+
+      // Chart
+      const windowSize = Math.max(5, Math.floor(data.length / 20));
+      const rolling = rollingAvg(waits, windowSize);
+      const labels  = data.map(d => d.student);
+
+      if (chartInstance) chartInstance.destroy();
+      const ctx = document.getElementById('waitChart').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Wait Time (mins)',
+              data: waits,
+              borderColor: '#df9ea9',
+              borderWidth: 1,
+              pointRadius: 0,
+              tension: 0.1,
+            },
+            {
+              label: `Rolling Avg (${windowSize} students)`,
+              data: rolling,
+              borderColor: '#c51e3a',
+              borderWidth: 3,
+              pointRadius: 0,
+              tension: 0.3,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              labels: { font: { family: 'DM Mono', size: 11 }, color: '#3d3242' }
+            },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)} min`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { font: { family: 'DM Mono', size: 10 }, color: '#999', maxTicksLimit: 12 },
+              grid: { color: '#f0f0f0' },
+              title: { display: true, text: 'Student Number', font: { family: 'DM Sans', size: 11 }, color: '#3d3242' }
+            },
+            y: {
+              ticks: { font: { family: 'DM Mono', size: 10 }, color: '#999' },
+              grid: { color: '#f0f0f0' },
+              title: { display: true, text: 'Wait Time (mins)', font: { family: 'DM Sans', size: 11 }, color: '#3d3242' }
+            }
+          }
+        }
+      });
+
+      // Summary
+      document.getElementById('summary-text').innerHTML = plainSummary(utilization, avgWait, numWindows, numStudents);
+
+      // Table (first 100 rows)
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = '';
+      const shown = data.slice(0, 100);
+      shown.forEach(row => {
+        const tr = document.createElement('tr');
+        if (row.wait > 10) tr.classList.add('highlight');
+        tr.innerHTML = `
+          <td>${row.student}</td>
+          <td>${row.arrival.toFixed(2)}</td>
+          <td>${row.interArrival.toFixed(2)}</td>
+          <td>${row.service.toFixed(2)}</td>
+          <td>${row.start.toFixed(2)}</td>
+          <td>${row.wait.toFixed(2)}</td>
+          <td>${row.finish.toFixed(2)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      document.getElementById('table-badge').textContent =
+        `${data.length} students${data.length > 100 ? ' (showing first 100)' : ''}`;
+
+      btn.disabled = false;
+      document.getElementById('btn-text').textContent = '▶ Run Simulation';
+    })();
+  }
+</script>
+</body>
+</html>
