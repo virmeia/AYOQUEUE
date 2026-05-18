@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AyoQueue — Student Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500&display=swap" rel="stylesheet" />
+  <title>AyoQueue — Registrar Login</title>
+  <style>/* Arial Nova loaded via system font stack */</style>
   <style>
     :root {
       --espresso: #160b04;
@@ -17,7 +17,7 @@
       --white:    #fffcf8;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; font-family: 'DM Sans', sans-serif; }
+    html, body { height: 100%; font-family: 'Arial Nova', 'Arial', sans-serif; }
 
     body {
       display: grid;
@@ -63,7 +63,7 @@
       font-size: 20px;
     }
     .brand-name {
-      font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 18px; font-weight: 800;
       color: var(--cream); letter-spacing: -0.02em;
     }
     .brand-name span { color: var(--gold); }
@@ -71,7 +71,7 @@
 
     .left-hero { }
     .left-hero h2 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Arial Nova', 'Arial', sans-serif;
       font-size: clamp(26px, 3vw, 40px); font-weight: 800;
       color: var(--cream); line-height: 1.2; letter-spacing: -0.03em;
       margin-bottom: 14px;
@@ -83,7 +83,7 @@
       display: flex; gap: 28px;
       padding-top: 24px; border-top: 1px solid rgba(196,122,42,.25);
     }
-    .stat .n { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--gold); }
+    .stat .n { font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 20px; font-weight: 800; color: var(--gold); }
     .stat .l { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: 0.05em; }
 
     .left-footer { font-size: 11px; color: #7a6050; }
@@ -98,25 +98,25 @@
     .right-header { margin-bottom: 36px; }
     .right-header .back-link {
       display: inline-flex; align-items: center; gap: 6px;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 400;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 13px; font-weight: 400;
       color: var(--muted); margin-bottom: 28px;
       text-decoration: none; transition: color .2s;
     }
     .right-header .back-link:hover { color: #b5553f; }
     .right-header h1 {
-      font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 28px; font-weight: 800;
       color: var(--espresso); letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 8px;
     }
     .right-header h1 span { color: #b5553f; }
     .right-header p {
-      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 14px; font-weight: 400;
       color: #6b5040; line-height: 1.75;
     }
 
     /* Form */
     .form-group { margin-bottom: 20px; }
     .form-group label {
-      display: block; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
+      display: block; font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 11px; font-weight: 600;
       color: #6b5040; letter-spacing: 0.08em; text-transform: uppercase;
       margin-bottom: 7px;
     }
@@ -126,33 +126,33 @@
       font-size: 15px; pointer-events: none;
     }
     .form-group input {
-      width: 100%; padding: 12px 14px 12px 42px;
+      width: 100%; padding: 12px 14px;
       background: var(--smoke);
       border: 1.5px solid rgba(196,122,42,.25);
       border-radius: 8px;
-      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 14px;
       color: var(--espresso); outline: none;
       transition: border-color .2s, background .2s;
     }
     .form-group input:focus { border-color: #9a493c; background: var(--white); }
-    .form-group input::placeholder { color: #c8a882; font-size: 13px; font-family: 'DM Sans', sans-serif; }
+    .form-group input::placeholder { color: #c8a882; font-size: 13px; font-family: 'Arial Nova', 'Arial', sans-serif; }
 
-    .form-hint { font-family: 'DM Sans', sans-serif; font-size: 11px; color: #b09070; margin-top: 5px; }
+    .form-hint { font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 11px; color: #b09070; margin-top: 5px; }
 
     /* Error */
     .error-box {
       display: none;
       background: #f8d7da; border: 1px solid #f5c2c7; border-left: 4px solid #dc3545;
       border-radius: 8px; padding: 12px 16px; margin-bottom: 20px;
-      font-family: 'DM Sans', sans-serif; font-size: 13px; color: #721c24;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 13px; color: #721c24;
     }
     .error-box.show { display: flex; align-items: center; gap: 8px; }
 
     /* Submit */
     .submit-btn {
       width: 100%; padding: 14px;
-      background: var(--amber); color: var(--smoke);
-      font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800;
+      background: var(--amber); color: var(--espresso);
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 14px; font-weight: 800;
       border: none; border-radius: 8px; cursor: pointer;
       display: flex; align-items: center; justify-content: center; gap: 8px;
       transition: background .2s, transform .1s;
@@ -170,7 +170,7 @@
 
     /* Demo accounts */
     .demo-section { margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(196,122,42,.15); }
-    .demo-title { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600; color: #b09070; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+    .demo-title { font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 10px; font-weight: 600; color: #b09070; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
     .demo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .demo-btn {
       padding: 8px 10px; background: var(--smoke);
@@ -179,20 +179,20 @@
       text-align: left;
     }
     .demo-btn:hover { border-color: #9a493c; background: #faeeda; }
-    .demo-btn .demo-id { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--espresso); }
-    .demo-btn .demo-name { font-family: 'DM Sans', sans-serif; font-size: 10px; color: #7a6050; margin-top: 2px; }
+    .demo-btn .demo-id { font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 11px; font-weight: 500; color: var(--espresso); }
+    .demo-btn .demo-name { font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 10px; color: #7a6050; margin-top: 2px; }
 
     /* Success state */
     .success-panel {
       display: none; text-align: center; padding: 20px 0;
     }
     .success-icon { font-size: 48px; margin-bottom: 16px; }
-    .success-panel h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--espresso); margin-bottom: 8px; }
-    .success-panel p { font-family: 'DM Sans', sans-serif; font-size: 14px; color: #6b5040; line-height: 1.75; margin-bottom: 24px; }
+    .success-panel h2 { font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 22px; font-weight: 800; color: var(--espresso); margin-bottom: 8px; }
+    .success-panel p { font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 14px; color: #6b5040; line-height: 1.75; margin-bottom: 24px; }
     .success-panel .go-btn {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--amber); color: var(--espresso);
-      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 13px; font-weight: 800;
       padding: 12px 24px; border-radius: 8px; border: none; cursor: pointer;
       transition: background .2s; text-decoration: none;
     }
@@ -224,7 +224,7 @@
     </div>
 
     <div class="left-hero">
-      <h2>Welcome back,<br/><span>TUP Student</span></h2>
+      <h2>Welcome back,<br/><span>Registrar Staff</span></h2>
       <p>Sign in to access queue tracking, document requests, and registrar services — all in one place.</p>
       <div class="left-stats" style="margin-top:24px">
         <div class="stat"><div class="n">~12</div><div class="l">AVG. WAIT (MINS)</div></div>
@@ -242,20 +242,20 @@
   <div id="loginPanel">
     <div class="right-header">
       <a href="homepage.html" class="back-link">← Back to homepage</a>
-      <h1>Student <span>Login</span></h1>
-      <p>Enter your TUP student ID and password to access registrar services.</p>
+      <h1>Registrar <span>Login</span></h1>
+      <p>Enter your staff credentials to access the AyoQueue registrar management system.</p>
     </div>
 
     <div class="error-box" id="errorBox">
-      <span>⚠️</span> <span id="errorMsg">Invalid student ID or password.</span>
+      <span id="errorMsg">Invalid staff ID or password.</span>
     </div>
 
     <div class="form-group">
-      <label>Student ID</label>
+      <label>Staff ID</label>
       <div class="input-wrap">
-        <input type="text" id="studentId" placeholder="e.g. 2021-00001" autocomplete="username" />
+        <input type="text" id="studentId" placeholder="e.g. REG-2025-001" autocomplete="username" />
       </div>
-      <div class="form-hint">Format: YYYY-NNNNN (e.g. 2021-00001)</div>
+      <div class="form-hint">Your staff ID issued by the Registrar's Office</div>
     </div>
 
     <div class="form-group">
@@ -270,23 +270,15 @@
     </button>
 
     <div class="demo-section">
-      <div class="demo-title">Demo accounts — click to fill</div>
+      <div class="demo-title">Staff demo accounts — click to fill</div>
       <div class="demo-grid">
-        <button class="demo-btn" onclick="fillDemo('2021-00001','student123')">
-          <div class="demo-id">2021-00001</div>
-          <div class="demo-name">Juan dela Cruz · BSIT</div>
+        <button class="demo-btn" onclick="fillDemo('REG-2025-001','registrar123')">
+          <div class="demo-id">REG-2025-001</div>
+          <div class="demo-name">Anna Reyes · Head Registrar</div>
         </button>
-        <button class="demo-btn" onclick="fillDemo('2021-00002','student123')">
-          <div class="demo-id">2021-00002</div>
-          <div class="demo-name">Maria Santos · BSECE</div>
-        </button>
-        <button class="demo-btn" onclick="fillDemo('2022-00003','student123')">
-          <div class="demo-id">2022-00003</div>
-          <div class="demo-name">Jose Reyes · BSME</div>
-        </button>
-        <button class="demo-btn" onclick="fillDemo('admin','admin2025')">
-          <div class="demo-id">admin</div>
-          <div class="demo-name">Admin User · Staff</div>
+        <button class="demo-btn" onclick="fillDemo('REG-2025-002','registrar123')">
+          <div class="demo-id">REG-2025-002</div>
+          <div class="demo-name">Carlos Santos · Registrar Staff</div>
         </button>
       </div>
     </div>
@@ -294,7 +286,7 @@
 
   <!-- Success state -->
   <div class="success-panel" id="successPanel">
-    <div class="success-icon">✅</div>
+    
     <h2 id="welcomeMsg">Welcome back!</h2>
     <p id="welcomeSub">You're now signed in. Redirecting to the homepage...</p>
     <a href="homepage.html" class="go-btn" id="dashboardLink">Go to Homepage →</a>
@@ -328,7 +320,7 @@ async function doLogin() {
   const err  = document.getElementById('errorBox');
 
   if (!sid || !pass) {
-    showError('Please enter your student ID and password.');
+    showError('Please enter your staff ID and password.');
     return;
   }
 
@@ -349,26 +341,24 @@ async function doLogin() {
     if (data.success) {
       // Store user in sessionStorage
       sessionStorage.setItem('aq_user', JSON.stringify({
-        name: data.name, course: data.course, year: data.year, id: data.id
+        name: data.name, role: data.role, id: data.id
       }));
-      showSuccess(data.name, data.course);
+      showSuccess(data.name, data.role);
     } else {
       showError(data.message || 'Invalid credentials.');
     }
   } catch (e) {
     // Backend not running — fall back to client-side demo auth
     const demo = {
-      '2021-00001': { password: 'student123', name: 'Juan dela Cruz',  course: 'BSIT',  year: 3 },
-      '2021-00002': { password: 'student123', name: 'Maria Santos',    course: 'BSECE', year: 2 },
-      '2022-00003': { password: 'student123', name: 'Jose Reyes',      course: 'BSME',  year: 1 },
-      'admin':      { password: 'admin2025',  name: 'Admin User',      course: 'Staff', year: 0 },
+      'REG-2025-001': { password: 'registrar123', name: 'Anna Reyes',    course: 'Head Registrar', year: 0 },
+      'REG-2025-002': { password: 'registrar123', name: 'Carlos Santos', course: 'Registrar Staff', year: 0 },
     };
     const u = demo[sid];
     if (u && u.password === pass) {
-      sessionStorage.setItem('aq_user', JSON.stringify({ name: u.name, course: u.course, year: u.year, id: sid }));
-      showSuccess(u.name, u.course);
+      sessionStorage.setItem('aq_user', JSON.stringify({ name: u.name, role: u.role, id: sid }));
+      showSuccess(u.name, u.role);
     } else {
-      showError('Invalid student ID or password.');
+      showError('Invalid staff ID or password.');
     }
   } finally {
     btn.disabled = false;
@@ -382,13 +372,13 @@ function showError(msg) {
   err.classList.add('show');
 }
 
-function showSuccess(name, course) {
+function showSuccess(name, role) {
   document.getElementById('loginPanel').style.display = 'none';
   const sp = document.getElementById('successPanel');
   sp.style.display = 'block';
   document.getElementById('welcomeMsg').textContent = `Welcome, ${name.split(' ')[0]}!`;
   document.getElementById('welcomeSub').textContent =
-    `${course} student — signed in successfully. Redirecting to the homepage…`;
+    `${role} — access granted. Redirecting to the homepage…`;
   setTimeout(() => { window.location.href = 'homepage.html'; }, 2200);
 }
 </script>

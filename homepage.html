@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AyoQueue — TUP Manila Registrar</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500&display=swap" rel="stylesheet" />
+  <style>/* Arial Nova loaded via system font stack */</style>
   <style>
     :root {
       --espresso: #160b04;
@@ -18,7 +18,7 @@
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--smoke); color: var(--espresso); }
+    body { font-family: 'Arial Nova', 'Arial', sans-serif; background: var(--smoke); color: var(--espresso); }
     a { text-decoration: none; color: inherit; }
 
     /* ── TOPBAR ── */
@@ -49,7 +49,7 @@
       overflow: hidden;
     }
     .brand-name {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Arial Nova', 'Arial', sans-serif;
       font-size: 18px; font-weight: 800; color: var(--cream);
       letter-spacing: -0.02em;
     }
@@ -65,18 +65,18 @@
 
     /* Nav right — guest vs logged-in */
     .nav-btn {
-      background: var(--amber); color: var(--smoke);
-      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      background: var(--amber); color: var(--espresso);
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 12px; font-weight: 700;
       padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer;
       display: flex; align-items: center; gap: 6px; transition: background .2s;
     }
     .nav-btn:hover { background: var(--gold); }
     .nav-user-info { text-align: right; }
-    .nav-user-name { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; color:var(--gold); }
+    .nav-user-name { font-family:'Arial Nova','Arial',sans-serif; font-size:13px; font-weight:700; color:var(--gold); }
     .nav-user-sub  { font-size:10px; color:var(--muted); margin-top:1px; }
     .nav-logout {
       background: transparent; border: 1.5px solid var(--amber); color: var(--gold);
-      font-family:'Syne',sans-serif; font-size:11px; font-weight:700;
+      font-family:'Arial Nova','Arial',sans-serif; font-size:11px; font-weight:700;
       padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all .2s;
     }
     .nav-logout:hover { background: var(--amber); color: var(--espresso); }
@@ -121,9 +121,9 @@
       border-radius: 100px; padding: 5px 14px; margin-bottom: 18px;
     }
     .hero-tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
-    .hero-tag span { font-size: 10px; color: var(--gold); letter-spacing: 0.1em; font-family: 'DM Mono', monospace; }
+    .hero-tag span { font-size: 10px; color: var(--gold); letter-spacing: 0.1em; font-family: 'Arial Nova', 'Arial', sans-serif; }
     .hero h1 {
-      font-family: 'Syne', sans-serif;
+      font-family: 'Arial Nova', 'Arial', sans-serif;
       font-size: clamp(28px, 4vw, 44px); font-weight: 800;
       color: var(--cream); line-height: 1.15;
       letter-spacing: -0.03em; margin-bottom: 14px;
@@ -135,15 +135,15 @@
     }
     .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
     .btn-primary {
-      background: var(--amber); color: var(--smoke);
-      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      background: var(--amber); color: var(--espresso);
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 13px; font-weight: 700;
       padding: 11px 22px; border-radius: 7px; border: none; cursor: pointer;
       display: flex; align-items: center; gap: 8px; transition: background .2s;
     }
     .btn-primary:hover { background: var(--gold); }
     .btn-outline {
       background: transparent; color: #f0c4bb;
-      font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 13px; font-weight: 700;
       padding: 11px 22px; border-radius: 7px; border: 1.5px solid #9a493c;
       cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all .2s;
     }
@@ -153,7 +153,7 @@
       padding-top: 28px; border-top: 1px solid rgba(196,122,42,.2);
     }
     .stat .n {
-      font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 22px; font-weight: 800;
       color: var(--gold); letter-spacing: -0.02em;
     }
     .stat .l { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: 0.05em; }
@@ -177,7 +177,7 @@
       display: flex; align-items: baseline; justify-content: space-between;
       margin-bottom: 20px;
     }
-    .section-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--espresso); }
+    .section-title { font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 16px; font-weight: 700; color: var(--espresso); }
     .section-link { font-size: 12px; color: #b5553f; display: flex; align-items: center; gap: 4px; cursor: pointer; }
     .section-link:hover { color: var(--amber); }
     .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -214,7 +214,7 @@
       border-radius: 12px; padding: 20px 22px;
     }
     .card-title {
-      font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 12px; font-weight: 700;
       color: var(--espresso); letter-spacing: 0.05em; text-transform: uppercase;
       margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
     }
@@ -248,7 +248,7 @@
       display: flex; align-items: center; justify-content: space-between;
     }
     .footer-brand { font-size: 13px; color: var(--muted); }
-    .footer-brand span { color: var(--gold); font-family: 'Syne', sans-serif; font-weight: 700; }
+    .footer-brand span { color: var(--gold); font-family: 'Arial Nova', 'Arial', sans-serif; font-weight: 700; }
     .footer-links { display: flex; gap: 20px; }
     .footer-links a { font-size: 11px; color: #7a6050; transition: color .2s; }
     .footer-links a:hover { color: var(--muted); }
@@ -285,7 +285,7 @@
   </div>
 
   <!-- Guest state -->
-  <button class="nav-btn" id="loginBtn" onclick="window.location.href='login.html'">Student Login</button>
+  <button class="nav-btn" id="loginBtn" onclick="window.location.href='login.html'"> Registrar Login</button>
 
   <!-- Logged-in state (hidden until auth check) -->
   <div id="userNav" style="display:none; align-items:center; gap:12px;">
@@ -307,11 +307,11 @@
       <span class="dot"></span>
       <span>REGISTRAR'S OFFICE &nbsp;·&nbsp; OPEN TODAY</span>
     </div>
-    <h1>Smarter queuing for<br/>the <span>TUP Registrar</span></h1>
-    <p>Track real-time queue status, request academic documents, and simulate wait times before you visit — so you spend less time in line and more time on what matters.</p>
+    <h1>Queue management for the<br/><span>TUP Registrar</span> Staff</h1>
+    <p>Monitor and manage student queues at the TUP Manila Registrar's Office. Access queue simulation tools, service windows management, and daily transaction reports — for authorized registrar staff only.</p>
     <div class="hero-actions">
-      <button class="btn-primary">📋 Check Live Queue</button>
-      <button class="btn-outline">📄 Request a Document</button>
+      <button class="btn-primary">Manage Queue</button>
+      <button class="btn-outline">View Reports</button>
     </div>
     <div class="hero-stats">
       <div class="stat"><div class="n">~12</div><div class="l">AVG. WAIT (MINS)</div></div>
@@ -325,10 +325,10 @@
 <!-- NOTICE -->
 <div class="notice-section">
   <div class="notice-card">
-    <div class="notice-icon">⚠️</div>
+    
     <div>
       <div class="notice-title">Enrollment period advisory</div>
-      <div class="notice-body">Expect longer wait times from May 19–23. We recommend visiting before 10:00 AM or after 2:00 PM. Online document requests remain available 24/7 through the student portal.</div>
+      <div class="notice-body">Expect higher transaction volumes from May 19–23 due to enrollment period. Additional service windows may be required. Coordinate with the Head Registrar for staffing adjustments.</div>
     </div>
   </div>
 </div>
@@ -341,38 +341,32 @@
   </div>
   <div class="services-grid">
     <div class="svc-card">
-      <div class="svc-icon ic-amber">🎓</div>
-      <div class="svc-name">Transcript of Records</div>
+            <div class="svc-name">Transcript of Records</div>
       <div class="svc-desc">Request official TOR for employment, further studies, or transfer purposes.</div>
       <span class="svc-tag">3–5 working days</span>
     </div>
     <div class="svc-card">
-      <div class="svc-icon ic-blue">🪪</div>
-      <div class="svc-name">Enrollment Certification</div>
+            <div class="svc-name">Enrollment Certification</div>
       <div class="svc-desc">Get a certification of current enrollment status for any purpose.</div>
       <span class="svc-tag new">Same day</span>
     </div>
     <div class="svc-card">
-      <div class="svc-icon ic-green">📋</div>
-      <div class="svc-name">Grades &amp; Evaluation</div>
+            <div class="svc-name">Grades &amp; Evaluation</div>
       <div class="svc-desc">View official grades, request evaluation for graduation clearance.</div>
       <span class="svc-tag">1–2 working days</span>
     </div>
     <div class="svc-card">
-      <div class="svc-icon ic-coral">🔄</div>
-      <div class="svc-name">Transfer Credentials</div>
+            <div class="svc-name">Transfer Credentials</div>
       <div class="svc-desc">Honorable dismissal and document release for transferring students.</div>
       <span class="svc-tag">5–7 working days</span>
     </div>
     <div class="svc-card">
-      <div class="svc-icon ic-purple">📅</div>
-      <div class="svc-name">Graduation Application</div>
+            <div class="svc-name">Graduation Application</div>
       <div class="svc-desc">File for graduation, check eligibility, and track application status.</div>
       <span class="svc-tag">Per schedule</span>
     </div>
     <div class="svc-card">
-      <div class="svc-icon ic-teal">📊</div>
-      <div class="svc-name">Queue Simulation</div>
+            <div class="svc-name">Queue Simulation</div>
       <div class="svc-desc">Run an M/M/1 Monte Carlo model to predict wait times before visiting.</div>
       <span class="svc-tag new">New tool</span>
     </div>
@@ -383,7 +377,7 @@
 <div class="bottom-grid">
   <div class="info-card">
     <div class="card-title">
-      <span class="icon">🕐</span> Office Hours
+      Office Hours
       <span class="open-badge"><span class="open-dot"></span> Open now</span>
     </div>
     <div class="hours-row"><span class="day">Monday – Thursday</span><span>8:00 AM – 5:00 PM</span></div>
@@ -393,12 +387,12 @@
     <div class="hours-row"><span class="day">Holidays</span><span>Closed</span></div>
   </div>
   <div class="info-card">
-    <div class="card-title"><span class="icon">📍</span> Contact &amp; Location</div>
-    <div class="contact-row"><span class="icon">🏛️</span> Ayala Blvd, Ermita, Manila</div>
-    <div class="contact-row"><span class="icon">📞</span> (02) 8441-0927 loc. 120</div>
-    <div class="contact-row"><span class="icon">✉️</span> registrar@tup.edu.ph</div>
-    <div class="contact-row"><span class="icon">🌐</span> www.tup.edu.ph/registrar</div>
-    <div class="contact-row"><span class="icon">💬</span> FB: TUP Manila Registrar</div>
+    <div class="card-title">Contact &amp; Location</div>
+    <div class="contact-row">Ayala Blvd, Ermita, Manila</div>
+    <div class="contact-row">(02) 8441-0927 loc. 120</div>
+    <div class="contact-row">registrar@tup.edu.ph</div>
+    <div class="contact-row">www.tup.edu.ph/registrar</div>
+    <div class="contact-row">FB: TUP Manila Registrar</div>
   </div>
 </div>
 
@@ -429,8 +423,7 @@ function doLogout() {
   if (stored) {
     const u = JSON.parse(stored);
     document.getElementById('navName').textContent = u.name || u.id;
-    document.getElementById('navSub').textContent =
-      u.course && u.course !== 'Staff' ? `${u.course} · Year ${u.year}` : (u.course || 'TUP Manila');
+    document.getElementById('navSub').textContent = u.role || 'Registrar Staff';
     document.getElementById('loginBtn').style.display = 'none';
     document.getElementById('userNav').style.display = 'flex';
   }

@@ -10,10 +10,8 @@ CORS(app, supports_credentials=True, origins=['null', 'http://localhost:*', 'htt
 
 # ── In-memory user store (replace with DB in production) ──────────────────────
 USERS = {
-    "2021-00001": {"password": "student123", "name": "Juan dela Cruz",    "course": "BSIT",  "year": 3},
-    "2021-00002": {"password": "student123", "name": "Maria Santos",      "course": "BSECE", "year": 2},
-    "2022-00003": {"password": "student123", "name": "Jose Reyes",        "course": "BSME",  "year": 1},
-    "admin":      {"password": "admin2025",  "name": "Admin User",        "course": "Staff", "year": 0},
+    "REG-2025-001": {"password": "registrar123", "name": "Anna Reyes",    "role": "Head Registrar"},
+    "REG-2025-002": {"password": "registrar123", "name": "Carlos Santos", "role": "Registrar Staff"},
 }
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -69,8 +67,7 @@ def login():
     return jsonify({
         'success': True,
         'name':    user['name'],
-        'course':  user['course'],
-        'year':    user['year'],
+        'role':    user['role'],
         'id':      sid,
     })
 
@@ -85,7 +82,7 @@ def me():
     if not sid or sid not in USERS:
         return jsonify({'logged_in': False}), 401
     u = USERS[sid]
-    return jsonify({'logged_in': True, 'name': u['name'], 'course': u['course'], 'year': u['year'], 'id': sid})
+    return jsonify({'logged_in': True, 'name': u['name'], 'role': u['role'], 'id': sid})
 
 @app.route('/api/simulate', methods=['POST'])
 def simulate():
