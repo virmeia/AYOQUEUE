@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AyoQueue — Registrar Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Arial Nova', Arial, sans-serif;
+      background: #130c0a;
+      color: #f5e6d3;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* LEFT SIDE: Campus Photo Background Panel */
+    .bg-panel {
+      flex: 1.2; /* Takes up slightly more room to showcase campus banner */
+      position: relative;
+      background: linear-gradient(rgba(19, 12, 10, 0.6), rgba(19, 12, 10, 0.6)), 
+                  url('/static/campus-bg.jpg') center/cover no-repeat;
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Left Panel Top Header */
+    .bg-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .bg-header img {
+      height: 36px;
+      width: 36px;
+      object-fit: contain;
+    }
+    .bg-brand-text {
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+    .bg-brand-text span { color: #d27061; }
+    .bg-brand-sub {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.8;
+      display: block;
+      margin-top: 1px;
+    }
+
+    /* Left Panel Central Content */
+    .bg-middle-content {
+      margin-top: auto;
+      margin-bottom: auto;
+      max-width: 500px;
+    }
+    .bg-middle-content h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .bg-middle-content h2 span {
+      color: #d27061;
+    }
+    .bg-middle-content p {
+      font-size: 0.95rem;
+      color: #fdfaf6;
+      opacity: 0.85;
+      line-height: 1.6;
+    }
+
+    /* Left Panel Mini Analytical Live Dashboard Display Data */
+    .bg-live-metrics {
+      display: flex;
+      gap: 36px;
+    }
+    .metric-item .num {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #f5e6d3;
+    }
+    .metric-item .lbl {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      color: #c9a882;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* Left Panel Footer watermark */
+    .bg-footer {
+      font-size: 0.75rem;
+      opacity: 0.5;
+      margin-top: 24px;
+    }
+
+
+    /* RIGHT SIDE: The Off-White Login Form Container */
+    .login-panel {
+      background: #fbf8f3; /* Warm off-white page body */
+      width: 40%;
+      min-width: 420px;
+      height: 100%;
+      padding: 48px 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+      z-index: 2;
+    }
+
+    .back-link {
+      color: #9a493c;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 32px;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    .form-container h3 {
+      font-size: 1.8rem;
+      color: #130c0a;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .form-container h3 span { color: #d27061; }
+    
+    .form-desc {
+      color: #7a6a60;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin-bottom: 32px;
+    }
+
+    /* Form Inputs */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #3d2d20;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #dcd1c4;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #130c0a;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .form-group input::placeholder {
+      color: #bfae9e;
+    }
+    .form-group input:focus {
+      border-color: #d27061;
+    }
+    .form-help-text {
+      font-size: 0.75rem;
+      color: #a39285;
+      margin-top: 2px;
+    }
+
+    .sign-in-btn {
+      width: 100%;
+      background: #a25246; /* Desaturated deep clay-red button */
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
+    }
+    .sign-in-btn:hover { background: #854136; }
+
+    /* Bottom Section: Clickable Demo Logins */
+    .demo-accounts {
+      border-top: 1px dashed #dcd1c4;
+      padding-top: 20px;
+      margin-top: auto;
+    }
+    .demo-title {
+      font-size: 0.7rem;
+      font-weight: bold;
+      color: #a39285;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+    .demo-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .demo-btn {
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      flex: 1;
+    }
+    .demo-btn .id {
+      font-size: 0.8rem;
+      color: #5c4d42;
+      font-weight: 600;
+      display: block;
+    }
+    .demo-btn .name {
+      font-size: 0.72rem;
+      color: #a39285;
+    }
+    .demo-btn:hover .id {
+      color: #d27061;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 900px) {
+      .bg-panel { display: none; }
+      .login-panel { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-panel">
+    <div class="bg-header">
+      <img src="/static/logo.png" alt="TUP Logo"/>
+      <div>
+        <div class="bg-brand-text">Ayo<span>QUEUE</span></div>
+        <div class="bg-brand-sub">Technological University of the Philippines &mdash; Manila</div>
+      </div>
+    </div>
+
+    <div class="bg-middle-content">
+      <h2>Welcome back,<br><span>Registrar Staff</span></h2>
+      <p>Sign in to access queue tracking, document requests, and registrar services &mdash; all in one place.</p>
+    </div>
+
+    <div class="bg-live-metrics">
+      <div class="metric-item">
+        <div class="num">~12</div>
+        <div class="lbl">Avg. Wait (Mins)</div>
+      </div>
+      <div class="metric-item">
+        <div class="num">3</div>
+        <div class="lbl">Windows Open</div>
+      </div>
+      <div class="metric-item">
+        <div class="num">47</div>
+        <div class="lbl">In Queue Now</div>
+      </div>
+    </div>
+
+    <div class="bg-footer">
+      &copy; 2025 TUP Manila Registrar's Office &middot; AyoQueue System
+    </div>
+  </div>
+
+  <div class="login-panel">
+    <div>
+      <a href="/" class="back-link">&larr; Back to homepage</a>
+      
+      <div class="form-container">
+        <h3>Registrar <span>Login</span></h3>
+        <p class="form-desc">Enter your staff credentials to access the AyoQueue registrar management system.</p>
+
+        <form method="POST" action="/login">
+          <div class="form-group">
+            <label for="staff_id">Staff ID</label>
+            <input type="text" id="staff_id" name="staff_id" placeholder="e.g. REG-2025-001" required>
+            <div class="form-help-text">Your staff ID issued by the Registrar's Office</div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+          </div>
+
+          <button type="submit" class="sign-in-btn">Sign In</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="demo-accounts">
+      <div class="demo-title">Staff Demo Accounts &mdash; Click to fill</div>
+      <div class="demo-row">
+        <button type="button" class="demo-btn" onclick="fillDemo('REG-2025-001')">
+          <span class="id">REG-2025-001</span>
+          <span class="name">Amor Reyes (Head Registrar)</span>
+        </button>
+        <button type="button" class="demo-btn" onclick="fillDemo('REG-2025-002')">
+          <span class="id">REG-2025-002</span>
+          <span class="name">Carlos Santos (Registrar Staff)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Quick helper function to fill demo profiles
+    function fillDemo(id) {
+      document.getElementById('staff_id').value = id;
+      document.getElementById('password').value = 'password123'; // or your default demo pass
+    }
+  </script>
+
+</body>
+</html>

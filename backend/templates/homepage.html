@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AyoQueue — TUP Manila Registrar</title>
+  <style>/* Arial Nova loaded via system font stack */</style>
+  <style>
+    :root {
+      --espresso: #160b04;
+      --dark:     #2a1505;
+      --amber:    #9a493c;
+      --gold:     #e8917f;
+      --cream:    #f5e6d3;
+      --muted:    #c8a882;
+      --smoke:    #fdf5ec;
+      --white:    #fffcf8;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Arial Nova', 'Arial', sans-serif; background: var(--smoke); color: var(--espresso); }
+    a { text-decoration: none; color: inherit; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0; z-index: 100;
+      background: var(--dark);
+      border-bottom: 2.5px solid var(--amber);
+      padding: 0 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-logo {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: transparent;
+      border: none;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .brand-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .brand-name {
+      font-family: 'Arial Nova', 'Arial', sans-serif;
+      font-size: 18px; font-weight: 800;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+    }
+    .brand-name span { color: var(--gold); }
+    .brand-sub { font-size: 9px; color: var(--muted); letter-spacing: 0.1em; margin-top: 1px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      font-size: 13px; color: var(--muted); padding: 7px 14px;
+      border-radius: 6px; transition: all .2s;
+    }
+    .nav-links a:hover { background: rgba(196,122,42,.15); color: var(--cream); }
+    .nav-links a.active { color: var(--gold); }
+
+    /* Nav right — guest vs logged-in */
+    .nav-btn {
+      background: var(--amber);
+      color: var(--espresso);
+      font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 12px; font-weight: 700;
+      padding: 8px 18px; border-radius: 6px; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; transition: background .2s;
+    }
+    .nav-btn:hover { background: var(--gold); }
+    .nav-user-info { text-align: right; }
+    .nav-user-name { font-family:'Arial Nova','Arial',sans-serif; font-size:13px; font-weight:700; color:var(--gold); }
+    .nav-user-sub  { font-size:10px; color:var(--muted); margin-top:1px; }
+    .nav-logout {
+      background: transparent; border: 1.5px solid var(--amber); color: var(--gold);
+      font-family:'Arial Nova','Arial',sans-serif; font-size:11px; font-weight:700;
+      padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all .2s;
+    }
+    .nav-logout:hover { background: var(--amber); color: var(--espresso); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 580px;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center top;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(22,11,4,0.45) 0%,
+        rgba(22,11,4,0.55) 40%,
+        rgba(22,11,4,0.85) 75%,
+        rgba(22,11,4,0.97) 100%
+      );
+    }
+    .hero-dot-grid {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(232,164,74,.08) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 40px 56px;
+      width: 100%;
+      max-width: 760px;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center;
+      gap: 8px;
+      background: rgba(196,122,42,.18); border: 1px solid rgba(196,122,42,.5);
+      border-radius: 100px; padding: 5px 14px; margin-bottom: 18px;
+    }
+    .hero-tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+    .hero-tag span { font-size: 10px; color: var(--gold); letter-spacing: 0.1em; font-family: 'Arial Nova', 'Arial', sans-serif; }
+    .hero h1 {
+      font-family: 'Arial Nova', 'Arial', sans-serif;
+      font-size: clamp(28px, 4vw, 44px); font-weight: 800;
+      color: var(--cream); line-height: 1.15;
+      letter-spacing: -0.03em; margin-bottom: 14px;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero p {
+      font-size: 14px; color: var(--muted); line-height: 1.75;
+      max-width: 520px;
+      margin-bottom: 28px;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
+    .btn-primary {
+      background: var(--amber); color: var(--espresso);
+      font-family: 'Arial Nova', 'Arial', sans-serif;
+      font-size: 13px; font-weight: 700;
+      padding: 11px 22px; border-radius: 7px; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      transition: background .2s;
+    }
+    .btn-primary:hover { background: var(--gold); }
+    .btn-outline {
+      background: transparent; color: #f0c4bb;
+      font-family: 'Arial Nova', 'Arial', sans-serif;
+      font-size: 13px; font-weight: 700;
+      padding: 11px 22px; border-radius: 7px; border: 1.5px solid #9a493c;
+      cursor: pointer; display: flex; align-items: center;
+      gap: 8px; transition: all .2s;
+    }
+    .btn-outline:hover { background: rgba(210,112,97,.2); }
+    .hero-stats {
+      display: flex; gap: 28px; flex-wrap: wrap;
+      padding-top: 28px;
+      border-top: 1px solid rgba(196,122,42,.2);
+    }
+    .stat .n {
+      font-family: 'Arial Nova', 'Arial', sans-serif;
+      font-size: 22px; font-weight: 800;
+      color: var(--gold); letter-spacing: -0.02em;
+    }
+    .stat .l { font-size: 10px; color: var(--muted); margin-top: 2px; letter-spacing: 0.05em; }
+
+    /* ── NOTICE ── */
+    .notice-section { background: var(--smoke); padding: 28px 40px; }
+    .notice-card {
+      background: #faeeda; border: 1px solid #fac775;
+      border-left: 5px solid var(--amber);
+      border-radius: 10px; padding: 16px 20px;
+      display: flex; gap: 14px; align-items: flex-start;
+      max-width: 900px;
+    }
+    .notice-icon { font-size: 22px; color: #854f0b; flex-shrink: 0; margin-top: 1px; }
+    .notice-title { font-size: 13px; font-weight: 600; color: #633806; margin-bottom: 4px; }
+    .notice-body { font-size: 12px; color: #7a4a10; line-height: 1.65; }
+
+    /* ── SERVICES ── */
+    .services-section { padding: 40px 40px 0; }
+    .section-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .section-title { font-family: 'Arial Nova', 'Arial', sans-serif; font-size: 16px; font-weight: 700; color: var(--espresso); }
+    .section-link { font-size: 12px; color: #b5553f; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+    .section-link:hover { color: var(--amber); }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .svc-card {
+      background: var(--white); border: 1px solid rgba(196,122,42,.2);
+      border-radius: 12px; padding: 18px; cursor: pointer;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .svc-card:hover { border-color: var(--amber); box-shadow: 0 4px 20px rgba(196,122,42,.1); }
+    .svc-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-bottom: 12px;
+    }
+    .ic-amber { background: #faeeda; }
+    .ic-blue  { background: #e6f1fb; }
+    .ic-green { background: #eaf3de; }
+    .ic-coral { background: #faece7; }
+    .ic-purple{ background: #eeedfe; }
+    .ic-teal  { background: #e1f5ee; }
+    .svc-name { font-size: 13px; font-weight: 600; color: var(--espresso); margin-bottom: 5px; }
+    .svc-desc { font-size: 11px; color: #6b5040; line-height: 1.55; }
+    .svc-tag {
+      display: inline-block; font-size: 10px; margin-top: 10px;
+      padding: 3px 9px; border-radius: 100px;
+      background: var(--smoke); border: 1px solid rgba(0,0,0,.1); color: #7a6050;
+    }
+    .svc-tag.new { background: #e6f1fb; color: #185fa5; border-color: #b5d4f4; }
+
+    /* ── BOTTOM GRID ── */
+    .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 24px 40px 40px; }
+    .info-card {
+      background: var(--white); border: 1px solid rgba(196,122,42,.2);
+      border-radius: 12px; padding: 20px 22px;
+    }
+    .card-title {
+      font-family: 'Arial Nova', 'Arial', sans-serif;
+      font-size: 12px; font-weight: 700;
+      color: var(--espresso); letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .card-title .icon { color: #b5553f; font-size: 15px; }
+    .open-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #d4edda; color: #155724; border: 1px solid #b8dacc;
+      font-size: 10px; padding: 2px 8px; border-radius: 100px; margin-left: auto;
+    }
+    .open-dot { width: 6px; height: 6px; border-radius: 50%; background: #28a745; }
+    .hours-row {
+      display: flex; justify-content: space-between;
+      font-size: 12px; color: #6b5040;
+      padding: 6px 0; border-bottom: 1px solid rgba(196,122,42,.1);
+    }
+    .hours-row:last-child { border-bottom: none; }
+    .hours-row .day { color: var(--espresso); font-weight: 500; }
+    .contact-row {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 12px; color: #6b5040;
+      padding: 6px 0; border-bottom: 1px solid rgba(196,122,42,.1);
+    }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-row .icon { color: #b5553f; width: 16px; text-align: center; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--espresso); border-top: 2px solid var(--amber);
+      padding: 18px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-brand { font-size: 13px; color: var(--muted); }
+    .footer-brand span { color: var(--gold); font-family: 'Arial Nova', 'Arial', sans-serif; font-weight: 700; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 11px; color: #7a6050; transition: color .2s; }
+    .footer-links a:hover { color: var(--muted); }
+
+    @media (max-width: 900px) {
+      nav, .hero-content, .notice-section, .services-section, .bottom-grid, footer {
+        padding-left: 20px; padding-right: 20px;
+      }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .bottom-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .services-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">
+    <div class="brand-logo">
+      <img src="/static/logo.png" alt="TUP Logo" />
+    </div>
+    <div class="brand-text">
+      <div class="brand-name">Ayo<span>QUEQE</span></div>
+      <div class="brand-sub">TECHNOLOGICAL UNIVERSITY OF THE PHILIPPINES · MANILA</div>
+    </div>
+  </div>
+  
+  <div class="nav-links">
+    <a href="#" class="active">Home</a>
+    <a href="#">Services</a>
+    <a href="#">Contacts</a>
+    <a href="#">About</a>
+  </div>
+
+  <div class="nav-right">
+    <button id="loginBtn" class="nav-btn" onclick="window.location.href='/login'">
+      Registrar Login
+    </button>
+    <div id="userNav" class="nav-links" style="display: none; gap: 18px;">
+      <div class="nav-user-info">
+        <div id="navName" class="nav-user-name">...</div>
+        <div id="navSub" class="nav-user-sub">...</div>
+      </div>
+      <button class="nav-logout" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+</nav>
+
+<div class="hero">
+  <div id="heroBg" class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-dot-grid"></div>
+  
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="dot"></span>
+      <span>REGISTRAR'S OFFICE · OPEN TODAY</span>
+    </div>
+    <h1>Queue management for the<br><span>TUP Registrar</span> Staff</h1>
+    <p>Monitor and manage student queues at the TUP Manila Registrar's Office. Access queue simulation tools, service windows management, and daily transaction reports — for authorized registrar staff only.</p>
+    
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="window.location.href='/login'">
+        Manage Queue
+      </button>
+      <button class="btn-outline">
+        View Reports
+      </button>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="n">~12</div>
+        <div class="l">AVG. WAIT TIME</div>
+      </div>
+      <div class="stat">
+        <div class="n">3</div>
+        <div class="l">ACTIVE WINDOWS</div>
+      </div>
+      <div class="stat">
+        <div class="n">47</div>
+        <div class="l">STUDENTS IN QUEUE</div>
+      </div>
+      <div class="stat">
+        <div class="n">8:00–5:00</div>
+        <div class="l">OFFICE HOURS</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notice-section">
+  <div class="notice-card">
+    <div class="notice-icon">📢</div>
+    <div>
+      <div class="notice-title">Advisory: Mid-Term Document Request Processing Timelines</div>
+      <div class="notice-body">Please note that due to high volume during the current grading term, official transcript evaluations and certifications may take up to 5-7 working days. Regular queue handling for clearance releases remains same-day.</div>
+    </div>
+  </div>
+</div>
+
+<div id="services" class="services-section">
+  <div class="section-header">
+    <div class="section-title">Available Registrar Operations</div>
+    <div class="section-link">Read Guide Regulations ➔</div>
+  </div>
+  
+  <div class="services-grid">
+    <div class="svc-card">
+      <div class="svc-icon ic-amber">📄</div>
+      <div class="svc-name">Transcript of Records (TOR)</div>
+      <div class="svc-desc">Request official copies of transcripts for graduation, transfer, or reference uses.</div>
+      <div class="svc-tag">Requires Clearance</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon ic-blue">🎓</div>
+      <div class="svc-name">Honorable Dismissal / Transfer</div>
+      <div class="svc-desc">Process exit documents and certifications for transferring to other institutions.</div>
+      <div class="svc-tag">Process Offline</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon ic-green">✔</div>
+      <div class="svc-name">Student Evaluation & Clearance</div>
+      <div class="svc-desc">Review remaining subject units and academic status profiles with counselors.</div>
+      <div class="svc-tag">Instant Queue</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon ic-coral">📜</div>
+      <div class="svc-name">Certifications & CAV</div>
+      <div class="svc-desc">True copies, enrollment verification statements, and DFA authentication files.</div>
+      <div class="svc-tag">3-5 Days</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon ic-purple">💳</div>
+      <div class="svc-name">ID Replacement Orders</div>
+      <div class="svc-desc">File requests for lost or damaged institutional badges via receipt processing.</div>
+      <div class="svc-tag">New</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon ic-teal">📁</div>
+      <div class="svc-name">Form 137 / Diplomas</div>
+      <div class="svc-desc">Pick up original certified files or request secondary back-issue verification letters.</div>
+      <div class="svc-tag">Archived Records</div>
+    </div>
+  </div>
+</div>
+
+<div id="info" class="bottom-grid">
+  <div class="info-card">
+    <div class="card-title">
+      <span class="icon">⏰</span> Office Operating Schedule
+      <div class="open-badge"><span class="open-dot"></span> Open Now</div>
+    </div>
+    <div class="hours-row">
+      <span class="day">Monday</span> <span>8:00 AM – 5:00 PM</span>
+    </div>
+    <div class="hours-row">
+      <span class="day">Tuesday</span> <span>8:00 AM – 5:00 PM</span>
+    </div>
+    <div class="hours-row">
+      <span class="day">Wednesday</span> <span>8:00 AM – 5:00 PM</span>
+    </div>
+    <div class="hours-row">
+      <span class="day">Thursday</span> <span>8:00 AM – 5:00 PM</span>
+    </div>
+    <div class="hours-row">
+      <span class="day">Friday</span> <span>8:00 AM – 5:00 PM</span>
+    </div>
+    <div class="hours-row" style="opacity: 0.5;">
+      <span class="day">Saturday & Sunday</span> <span>Closed</span>
+    </div>
+  </div>
+
+  <div class="info-card">
+    <div class="card-title"><span class="icon">✉</span> Contact Desk Directory</div>
+    <div class="contact-row">Intercom Tel: (02) 5301-3001 ext. 112</div>
+    <div class="contact-row">Direct Registrar Email: registrar@tupmanila.edu.ph</div>
+    <div class="contact-row">FB: TUP Manila Registrar</div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-brand"><span>AyoQUEUE</span> &nbsp;·&nbsp; TUP Manila Registrar's Office &nbsp;·&nbsp; © 2025</div>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Accessibility</a>
+    <a href="#">Contact Us</a>
+  </div>
+</footer>
+
+<script>
+const API = 'http://localhost:5000/api';
+
+document.getElementById('heroBg').style.backgroundImage = "url('/static/campus-bg.jpg')";
+
+function doLogout() {
+  sessionStorage.removeItem('aq_user');
+  try { fetch(`${API}/logout`, { method:'POST', credentials:'include' }); } catch(e) {}
+  document.getElementById('userNav').style.display = 'none';
+  document.getElementById('loginBtn').style.display = 'flex';
+}
+
+(function checkAuth() {
+  const stored = sessionStorage.getItem('aq_user');
+  if (stored) {
+    const u = JSON.parse(stored);
+    document.getElementById('navName').textContent = u.name || u.id;
+    document.getElementById('navSub').textContent = u.role || 'Registrar Staff';
+    document.getElementById('loginBtn').style.display = 'none';
+    document.getElementById('userNav').style.display = 'flex';
+  }
+})();
+</script>
+
+</body>
+</html>
